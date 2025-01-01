@@ -17,6 +17,7 @@ contract DeployMerkleAirdrop is Script {
         token.mint(token.owner(), s_amountToMint);
         token.transfer(address(airdrop), s_amountToMint);
         vm.stopBroadcast();
+        return (airdrop, token);
     }
 
     function run() external returns (MerkleAirdrop, BagelToken) {
