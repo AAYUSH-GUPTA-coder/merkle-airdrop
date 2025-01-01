@@ -5,8 +5,9 @@ import {Test, console} from "forge-std/Test.sol";
 import {MerkleAirdrop} from "src/MerkleAirdrop.sol";
 import {BagelToken} from "src/BagelToken.sol";
 import {ZkSyncChainChecker} from "foundry-devops/src/ZkSyncChainChecker.sol";
+import {DeployMerkleAirdrop} from "script/DeployMerkleAirdrop.s.sol";
 
-contract MerkleAirdropTest is Test {
+contract MerkleAirdropTest is ZkSyncChainChecker, Test {
     MerkleAirdrop public airdrop;
     BagelToken public token;
 
@@ -20,11 +21,15 @@ contract MerkleAirdropTest is Test {
     uint256 userPrivKey;
 
     function setUp() public {
-        token = new BagelToken();
-        airdrop = new MerkleAirdrop(ROOT, token);
-
-        token.mint(token.owner(), AMOUNT_TO_MINT);
-        token.transfer(address(airdrop), AMOUNT_TO_MINT);
+        if (!isZkSyncChain()) {
+            DeployMerkleAirdrop deployer = new DeployMerkleAirdrop();
+            (airdrop, token) = deployer.run();
+        } else {
+            token = new BagelToken();
+            airdrop = new MerkleAirdrop(ROOT, token);
+            token.mint(token.owner(), AMOUNT_TO_MINT);
+            token.transfer(address(airdrop), AMOUNT_TO_MINT);
+        }
         (user, userPrivKey) = makeAddrAndKey("user");
     }
 
