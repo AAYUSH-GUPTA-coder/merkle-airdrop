@@ -8,10 +8,10 @@ import {console} from "forge-std/console.sol";
 // Merkle tree input file generator script
 contract GenerateInput is Script {
     uint256 private constant AMOUNT = 25 * 1e18; // 25 ETH
-    string[] types = new string[](2);
+    string[] types = new string[](2); // static array for types of the input
     uint256 count;
-    string[] whitelist = new string[](4);
-    string private constant INPUT_PATH = "/script/target/input.json";
+    string[] whitelist = new string[](4); // static array for whitelist of addresses
+    string private constant INPUT_PATH = "/script/target/input.json"; // output file path
 
     function run() public {
         types[0] = "address";
