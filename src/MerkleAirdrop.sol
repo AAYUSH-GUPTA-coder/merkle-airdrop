@@ -47,7 +47,7 @@ contract MerkleAirdrop is EIP712 {
             revert MerkleAirdrop__InvalidSignature();
         }
 
-        // calculate using the account and the amount, the hash => leaf node. we are doing double hashing here
+        // calculate using the account and the amount, the hash => leaf node. we are doing double hashing here to save from 'second preimage attack'
         bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(account, amount))));
 
         // verify the proof, that it is merkle proof
